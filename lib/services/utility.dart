@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -46,6 +47,16 @@ mixin TextFieldInputDecoration{
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Icon(
         FontAwesomeIcons.lock,
+        size: 28,
+        color: Colors.white,
+      ),
+    ),
+    suffixIcon: GestureDetector(
+      onTap: (){
+        //FocusScope.of(context).unfocus();
+      },
+      child: Icon(
+        Icons.visibility,
         size: 28,
         color: Colors.white,
       ),

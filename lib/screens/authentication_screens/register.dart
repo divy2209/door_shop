@@ -31,12 +31,12 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return loading ? Loading() : Listener(
-      onPointerDown: (_) {
+      /*onPointerDown: (_) {
         FocusScopeNode currentFocus = FocusScope.of(context);
         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
           currentFocus.focusedChild.unfocus();
         }
-      },
+      },*/
       child: Stack(
         children: [
           //BackgroundImage(image: ''),
@@ -86,7 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   SizedBox(
-                    height: size.height * 0.1,
+                    height: size.height * 0.04,
                   ),
                   Form(
                     child: Column(

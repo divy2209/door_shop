@@ -33,176 +33,185 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return loading ? Loading() : Listener(
-      onPointerDown: (_) {
+      /*onPointerDown: (_) {
         // TODO: check if this works on tapping on the button too, else add in the button onTap function too
         FocusScopeNode currentFocus = FocusScope.of(context);
         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
           currentFocus.focusedChild.unfocus();
         }
-      },
+      },*/
       child: Stack(
         children: [
           //BackgroundImage(image: ''),
           Scaffold(
             backgroundColor: Colors.transparent,
-            body: Column(
-              children: [
-                Flexible(
-                  child: Center(
-                    child: Text(
-                      'Door Shop',
-                      // TODO: In the door shop, make the d with the logo d or add the logo along with the name
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 60,
-                        fontWeight: FontWeight.bold
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 175,
+                  ),
+                  Flexible(
+                    flex: 0,
+                    child: Center(
+                      child: Text(
+                        'Door Shop',
+                        // TODO: In the door shop, make the d with the logo d or add the logo along with the name
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 60,
+                          fontWeight: FontWeight.bold
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Form(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Container(
-                          height: size.height * 0.08,
-                          width: size.width * 0.8,
-                          decoration: Palette.textBoxDeco,
-                          child: Center(
-                            child: TextFormField(
-                              decoration: TextFieldInputDecoration.emailField,
-                              //decoration: TextFieldInputDecoration.phoneField,
-                              onChanged: (value){
-                                // TODO: put this inside setState to make it work
-                                //phoneNumber = int.tryParse(value.trim());
-                                email = value.trim();
-                              },
-                              style: Palette.inputTextStyle,
-                              keyboardType: TextInputType.emailAddress,
-                              //keyboardType: TextInputType.phone,
-                              textInputAction: TextInputAction.next,
-                              //inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  SizedBox(
+                    height: 150,
+                  ),
+                  Form(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Container(
+                            height: size.height * 0.08,
+                            width: size.width * 0.8,
+                            decoration: Palette.textBoxDeco,
+                            child: Center(
+                              child: TextFormField(
+                                decoration: TextFieldInputDecoration.emailField,
+                                //decoration: TextFieldInputDecoration.phoneField,
+                                onChanged: (value){
+                                  // TODO: put this inside setState to make it work
+                                  //phoneNumber = int.tryParse(value.trim());
+                                  email = value.trim();
+                                },
+                                style: Palette.inputTextStyle,
+                                keyboardType: TextInputType.emailAddress,
+                                //keyboardType: TextInputType.phone,
+                                textInputAction: TextInputAction.next,
+                                //inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        // TODO: add passowrd visible eye icon
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Container(
-                          height: size.height * 0.08,
-                          width: size.width * 0.8,
-                          decoration: Palette.textBoxDeco,
-                          child: Center(
-                            child: TextFormField(
-                              decoration: TextFieldInputDecoration.passwordField,
-                              onChanged: (value){
-                                password = value;
-                              },
-                              obscureText: true,
-                              style: Palette.inputTextStyle,
-                              textInputAction: TextInputAction.done,
+                        Padding(
+                          // TODO: add passowrd visible eye icon
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Container(
+                            height: size.height * 0.08,
+                            width: size.width * 0.8,
+                            decoration: Palette.textBoxDeco,
+                            child: Center(
+                              child: TextFormField(
+                                decoration: TextFieldInputDecoration.passwordField,
+                                onChanged: (value){
+                                  password = value;
+                                },
+                                obscureText: true,
+                                style: Palette.inputTextStyle,
+                                textInputAction: TextInputAction.done,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ForgotPasswordPage())
-                          );
-                        },
-                        child: Text(
-                          'Forgot Password',
-                          style: Palette.inputTextStyle,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      Container(
-                        height: size.height * 0.08,
-                        width: size.width * 0.8,
-                        decoration: Palette.buttonBoxDecoration,
-                        child: TextButton(
-                          onPressed: () async {
-                            // TODO: Add incorrect password error
-                            String showError = CredentialValidation().loginValidation(email: email, password: password);
-                            if(showError == null) {
-                              setState(() {
-                                loading = true;
-                              });
-                              dynamic result = await _authorization.login(email: email, password: password);
-                              if (result == null){
-                                setState(() {
-                                  loading = false;
-                                  print('Error');
-                                });
-                              }
-                              print(email/*phoneNumber*/);
-                              print(password);
-                            } else {
-                              showModalBottomSheet<void>(
-                                context: context,
-                                builder: (BuildContext context){
-                                  return Container(
-                                    height: size.height * 0.3,
-                                    width: size.width,
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(showError)
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }
-                              );
-                            }
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ForgotPasswordPage())
+                            );
                           },
                           child: Text(
-                            'Login',
-                            style: Palette.buttonTextStyle,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      GestureDetector(
-                        onTap: (){
-                          //widget.toggleView();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => RegisterPage())
-                          );
-                        },
-                        child: Container(
-                          child: Text(
-                            'Create New Account',
+                            'Forgot Password',
                             style: Palette.inputTextStyle,
                           ),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                width: 1,
-                                color: Colors.white
-                              )
-                            )
+                        ),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Container(
+                          height: size.height * 0.08,
+                          width: size.width * 0.8,
+                          decoration: Palette.buttonBoxDecoration,
+                          child: TextButton(
+                            onPressed: () async {
+                              // TODO: Add incorrect password error
+                              String showError = CredentialValidation().loginValidation(email: email, password: password);
+                              if(showError == null) {
+                                setState(() {
+                                  loading = true;
+                                });
+                                dynamic result = await _authorization.login(email: email, password: password);
+                                if (result == null){
+                                  setState(() {
+                                    loading = false;
+                                    print('Error');
+                                  });
+                                }
+                                print(email/*phoneNumber*/);
+                                print(password);
+                              } else {
+                                showModalBottomSheet<void>(
+                                  context: context,
+                                  builder: (BuildContext context){
+                                    return Container(
+                                      height: size.height * 0.3,
+                                      width: size.width,
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(showError)
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                );
+                              }
+                            },
+                            child: Text(
+                              'Login',
+                              style: Palette.buttonTextStyle,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 25,
-                      )
-                    ],
+                        SizedBox(
+                          height: 25,
+                        ),
+                        GestureDetector(
+                          onTap: (){
+                            //widget.toggleView();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => RegisterPage())
+                            );
+                          },
+                          child: Container(
+                            child: Text(
+                              'Create New Account',
+                              style: Palette.inputTextStyle,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  width: 1,
+                                  color: Colors.white
+                                )
+                              )
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                )
-              ],
+                  SizedBox(
+                    height: 25,
+                  ),
+                ],
+              ),
             ),
           )
         ],
