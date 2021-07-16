@@ -1,5 +1,6 @@
 import 'package:door_shop/services/utility.dart';
 import 'package:door_shop/services/authentication_services/validate.dart';
+import 'package:door_shop/widgets/background_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -24,7 +25,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       },
       child: Stack(
         children: [
-          //BackgroundImage(image: '',),
+          BackgroundImage(image: 'assets/forgotpassword.jpg',),
           Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
@@ -51,7 +52,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: size.height * 0.1,
+                        height: size.height * 0.18,
                       ),
                       Container(
                         width: size.width * 0.8,

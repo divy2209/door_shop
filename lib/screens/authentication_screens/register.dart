@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:door_shop/services/authentication_services/authorization.dart';
 import 'package:door_shop/services/utility.dart';
 import 'package:door_shop/services/authentication_services/validate.dart';
+import 'package:door_shop/widgets/background_image.dart';
 import 'package:door_shop/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -39,7 +40,7 @@ class _RegisterPageState extends State<RegisterPage> {
       },*/
       child: Stack(
         children: [
-          //BackgroundImage(image: ''),
+          BackgroundImage(image: 'assets/register.jpg'),
           Scaffold(
             backgroundColor: Colors.transparent,
             body: SingleChildScrollView(

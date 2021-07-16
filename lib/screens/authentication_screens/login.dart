@@ -1,5 +1,6 @@
 import 'package:door_shop/services/authentication_services/authorization.dart';
 import 'package:door_shop/services/authentication_services/validate.dart';
+import 'package:door_shop/widgets/background_image.dart';
 import 'package:door_shop/widgets/loading.dart';
 
 import '../screens.dart';
@@ -42,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
       },*/
       child: Stack(
         children: [
-          //BackgroundImage(image: ''),
+          BackgroundImage(image: 'assets/login.jpg'),
           Scaffold(
             backgroundColor: Colors.transparent,
             body: SingleChildScrollView(
