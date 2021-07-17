@@ -31,13 +31,13 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return loading ? Loading() : Listener(
-      /*onPointerDown: (_) {
+    return loading ? Loading() : GestureDetector(
+      onTap: (){
         FocusScopeNode currentFocus = FocusScope.of(context);
         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
           currentFocus.focusedChild.unfocus();
         }
-      },*/
+      },
       child: Stack(
         children: [
           BackgroundImage(image: 'assets/register.jpg'),

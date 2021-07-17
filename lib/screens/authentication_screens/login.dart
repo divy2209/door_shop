@@ -33,14 +33,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return loading ? Loading() : Listener(
-      /*onPointerDown: (_) {
-        // TODO: check if this works on tapping on the button too, else add in the button onTap function too
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-          currentFocus.focusedChild.unfocus();
+    return loading ? Loading() : GestureDetector(
+      onTap: (){
+      FocusScopeNode currentFocus = FocusScope.of(context);
+      if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+        currentFocus.focusedChild.unfocus();
         }
-      },*/
+      },
       child: Stack(
         children: [
           BackgroundImage(image: 'assets/login.jpg'),
