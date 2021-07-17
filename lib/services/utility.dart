@@ -51,16 +51,6 @@ mixin TextFieldInputDecoration{
         color: Colors.white,
       ),
     ),
-    suffixIcon: GestureDetector(
-      onTap: (){
-        //FocusScope.of(context).unfocus();
-      },
-      child: Icon(
-        Icons.visibility,
-        size: 28,
-        color: Colors.white,
-      ),
-    ),
     hintText: 'Password',
     hintStyle: Palette.inputTextStyle
   );

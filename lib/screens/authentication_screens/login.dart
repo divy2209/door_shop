@@ -2,6 +2,7 @@ import 'package:door_shop/services/authentication_services/authorization.dart';
 import 'package:door_shop/services/authentication_services/validate.dart';
 import 'package:door_shop/widgets/background_image.dart';
 import 'package:door_shop/widgets/loading.dart';
+import 'package:flutter/animation.dart';
 
 import '../screens.dart';
 import 'package:door_shop/services/utility.dart';
@@ -144,31 +145,27 @@ class _LoginPageState extends State<LoginPage> {
                                   loading = true;
                                 });
                                 dynamic result = await _authorization.login(email: email, password: password);
-                                if (result == null){
+                                if (result == 505284406 || result == 185768934){
                                   setState(() {
                                     loading = false;
-                                    print('Error');
+                                    if(result == 505284406){
+                                      showError = "Email not registered!";
+                                    } else {
+                                      showError = "Incorrect password!";
+                                    }
+                                    //print(showError);
                                   });
                                 }
-                                print(email/*phoneNumber*/);
-                                print(password);
-                              } else {
-                                showModalBottomSheet<void>(
-                                  context: context,
-                                  builder: (BuildContext context){
-                                    return Container(
-                                      height: size.height * 0.3,
-                                      width: size.width,
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(showError)
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  }
+                                //print(email/*phoneNumber*/);
+                                //print(password);
+                              }
+                              if(showError != null){
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(showError),
+                                    backgroundColor: Palette.primaryColor.withOpacity(0.4),
+                                    duration: Duration(seconds: 5),
+                                  )
                                 );
                               }
                             },

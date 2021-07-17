@@ -48,7 +48,7 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: size.height * 0.1,
+                    height: size.height * 0.07,
                   ),
                   Stack(
                     children: [
@@ -207,41 +207,38 @@ class _RegisterPageState extends State<RegisterPage> {
                                   loading = true;
                                 });
                                 dynamic result = await _authorization.register(email: email, password: password, name: name, phone: phoneNumber);
-                                if (result == null){
+                                if (result == 34618382){
                                   setState(() {
                                     loading = false;
-                                    print('Error');
+                                    showError = 'Email already exists!';
                                   });
                                 } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Email Registered, Please login!'),
+                                      backgroundColor: Palette.primaryColor.withOpacity(0.4),
+                                      duration: Duration(seconds: 5),
+                                    )
+                                  );
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(builder: (context) => LoginPage()),
                                       ModalRoute.withName('/')
                                   );
                                 }
-                                //Navigator.pop(context);
-                                print(name);
+                                /*print(name);
                                 print(phoneNumber);
                                 print(email);
                                 print(password);
-                                print(confirmPassword);
-                              } else {
-                                showModalBottomSheet<void>(
-                                  context: context,
-                                  builder: (BuildContext context){
-                                    return Container(
-                                      height: size.height * 0.3,
-                                      width: size.width,
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(showError)
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  }
+                                print(confirmPassword);*/
+                              }
+                              if(showError != null){
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(showError),
+                                    backgroundColor: Palette.primaryColor.withOpacity(0.4),
+                                    duration: Duration(seconds: 5),
+                                  )
                                 );
                               }
                             },

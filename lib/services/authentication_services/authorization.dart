@@ -23,8 +23,7 @@ class AuthorizationService{
       return _userFromFirebase(user);
 
     } catch (e) {
-      print(e.toString());
-      return null;
+      return e.hashCode;
     }
   }
 
@@ -42,8 +41,7 @@ class AuthorizationService{
       return _userFromFirebase(user);
 
     } catch(e) {
-      print(e.toString());
-      return null;
+      return e.hashCode;
     }
   }
 
