@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:door_shop/screens/authentication_screens/login.dart';
 import 'package:door_shop/services/authentication_services/authorization.dart';
 import 'package:door_shop/services/utility.dart';
 import 'package:door_shop/services/authentication_services/validate.dart';
@@ -211,8 +212,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                     loading = false;
                                     print('Error');
                                   });
+                                } else {
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => LoginPage()),
+                                      ModalRoute.withName('/')
+                                  );
                                 }
-                                Navigator.pop(context);
+                                //Navigator.pop(context);
                                 print(name);
                                 print(phoneNumber);
                                 print(email);
@@ -256,8 +263,11 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             GestureDetector(
                               onTap: (){
-                                //widget.toggleView();
-                                Navigator.pop(context);
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => LoginPage()),
+                                    ModalRoute.withName('/')
+                                );
                               },
                               child: Text(
                                 'Login',

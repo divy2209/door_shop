@@ -184,9 +184,10 @@ class _LoginPageState extends State<LoginPage> {
                         GestureDetector(
                           onTap: (){
                             //widget.toggleView();
-                            Navigator.push(
+                            Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(builder: (context) => RegisterPage())
+                              MaterialPageRoute(builder: (context) => RegisterPage()),
+                              ModalRoute.withName('/')
                             );
                           },
                           child: Container(
