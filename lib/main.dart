@@ -18,7 +18,7 @@ import 'package:provider/provider.dart';
 // TODO: Action class inside the appBar shows the icon, flatbutton for user profile and cart, basically functionality to be placed at the right of the appBar
 // TODO: while navigating to another page, close the  keyboard
 // TODO: While landing on a page, closing the keyboard if open
-
+// TODO: getting permission to use location
 // TODO: handelling firebase errors
 
 Future<void> main() async {
