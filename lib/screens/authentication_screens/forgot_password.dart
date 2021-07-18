@@ -1,6 +1,7 @@
 import 'package:door_shop/services/utility.dart';
 import 'package:door_shop/services/authentication_services/validate.dart';
 import 'package:door_shop/widgets/background_image.dart';
+import 'package:door_shop/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,6 +13,8 @@ class ForgotPasswordPage extends StatefulWidget {
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   static int phoneNumber;
+
+  TextEditingController _phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -65,37 +68,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         height: 20,
                       ),
                       Form(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            height: size.height * 0.08,
-                            width: size.width * 0.8,
-                            decoration: Palette.textBoxDeco,
-                            child: Center(
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  prefixIcon: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                                    child: Icon(
-                                      FontAwesomeIcons.phone,
-                                      size: 28,
-                                      color: Colors.white
-                                    ),
-                                  ),
-                                  hintText: 'Phone Number',
-                                  hintStyle: Palette.inputTextStyle
-                                ),
-                                onChanged: (value){
-                                  phoneNumber = int.tryParse(value.trim());
-                                },
-                                style: Palette.inputTextStyle,
-                                keyboardType: TextInputType.phone,
-                                textInputAction: TextInputAction.done,
-                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                              ),
-                            ),
-                          ),
+                        child: InputField(
+                          isObscure: false,
+                          icon: FontAwesomeIcons.phone,
+                          hintText: 'Phone Number',
+                          inputType: TextInputType.phone,
+                          inputAction: TextInputAction.done,
+                          inputFormat: FilteringTextInputFormatter.digitsOnly,
+                          controller: _phoneController,
                         ),
                       ),
                       SizedBox(
@@ -107,26 +87,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         decoration: Palette.buttonBoxDecoration,
                         child: TextButton(
                           onPressed: () async {
+                            phoneNumber = int.tryParse(_phoneController.text.trim());
                             String showError = CredentialValidation().forgotPasswordValidation(phone: phoneNumber);
                             if(showError == null){
                               print(phoneNumber);
                             } else {
-                              showModalBottomSheet<void>(
-                                context: context,
-                                builder: (BuildContext context){
-                                  return Container(
-                                    height: size.height * 0.3,
-                                    width: size.width,
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(showError)
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(showError),
+                                  backgroundColor: Palette.primaryColor.withOpacity(0.4),
+                                  duration: Duration(seconds: 5),
+                                )
                               );
                             }
                           },

@@ -1,8 +1,11 @@
 import 'package:door_shop/services/authentication_services/authorization.dart';
 import 'package:door_shop/services/authentication_services/validate.dart';
 import 'package:door_shop/widgets/background_image.dart';
+import 'package:door_shop/widgets/button.dart';
 import 'package:door_shop/widgets/loading.dart';
+import 'package:door_shop/widgets/text_field.dart';
 import 'package:flutter/animation.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../screens.dart';
 import 'package:door_shop/services/utility.dart';
@@ -30,6 +33,9 @@ class _LoginPageState extends State<LoginPage> {
   //static int phoneNumber;
   static String email;
   static String password;
+
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -73,49 +79,20 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            height: size.height * 0.08,
-                            width: size.width * 0.8,
-                            decoration: Palette.textBoxDeco,
-                            child: Center(
-                              child: TextFormField(
-                                decoration: TextFieldInputDecoration.emailField,
-                                //decoration: TextFieldInputDecoration.phoneField,
-                                onChanged: (value){
-                                  // TODO: put this inside setState to make it work
-                                  //phoneNumber = int.tryParse(value.trim());
-                                  email = value.trim();
-                                },
-                                style: Palette.inputTextStyle,
-                                keyboardType: TextInputType.emailAddress,
-                                //keyboardType: TextInputType.phone,
-                                textInputAction: TextInputAction.next,
-                                //inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                              ),
-                            ),
-                          ),
+                        InputField(
+                          isObscure: false,
+                          inputAction: TextInputAction.next,
+                          inputType: TextInputType.emailAddress,
+                          controller: _emailController,
+                          icon: FontAwesomeIcons.envelope,
+                          hintText: 'Email',
                         ),
-                        Padding(
-                          // TODO: add passowrd visible eye icon
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            height: size.height * 0.08,
-                            width: size.width * 0.8,
-                            decoration: Palette.textBoxDeco,
-                            child: Center(
-                              child: TextFormField(
-                                decoration: TextFieldInputDecoration.passwordField,
-                                onChanged: (value){
-                                  password = value;
-                                },
-                                obscureText: true,
-                                style: Palette.inputTextStyle,
-                                textInputAction: TextInputAction.done,
-                              ),
-                            ),
-                          ),
+                        InputField(
+                          hintText: 'Password',
+                          icon: FontAwesomeIcons.lock,
+                          inputAction: TextInputAction.done,
+                          isObscure: true,
+                          controller: _passwordController,
                         ),
                         GestureDetector(
                           onTap: (){
@@ -132,13 +109,20 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(
                           height: 25,
                         ),
+                        /*Button(
+                          email: email,
+                          password: password,
+                          flag: 'login',
+                          label: 'Login',
+                        ),*/
                         Container(
                           height: size.height * 0.08,
                           width: size.width * 0.8,
                           decoration: Palette.buttonBoxDecoration,
                           child: TextButton(
                             onPressed: () async {
-                              // TODO: Add incorrect password error
+                              email = _emailController.text.trim();
+                              password = _passwordController.text;
                               String showError = CredentialValidation().loginValidation(email: email, password: password);
                               if(showError == null) {
                                 setState(() {

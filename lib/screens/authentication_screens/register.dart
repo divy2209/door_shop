@@ -5,6 +5,8 @@ import 'package:door_shop/services/utility.dart';
 import 'package:door_shop/services/authentication_services/validate.dart';
 import 'package:door_shop/widgets/background_image.dart';
 import 'package:door_shop/widgets/loading.dart';
+import 'package:door_shop/widgets/text_field.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -28,6 +30,12 @@ class _RegisterPageState extends State<RegisterPage> {
   static String email;
   static String password;
   static String confirmPassword;
+
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _cPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -93,103 +101,46 @@ class _RegisterPageState extends State<RegisterPage> {
                   Form(
                     child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            height: size.height * 0.08,
-                            width: size.width * 0.8,
-                            decoration: Palette.textBoxDeco,
-                            child: Center(
-                              child: TextFormField(
-                                decoration: TextFieldInputDecoration.nameField,
-                                onChanged: (value){
-                                  name = value.trim();
-                                },
-                                style: Palette.inputTextStyle,
-                                keyboardType: TextInputType.name,
-                                textInputAction: TextInputAction.next,
-                                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z]+|\s"))],
-                              ),
-                            ),
-                          ),
+                        InputField(
+                          controller: _nameController,
+                          inputAction: TextInputAction.next,
+                          inputType: TextInputType.name,
+                          hintText: 'Full Name',
+                          icon: FontAwesomeIcons.user,
+                          isObscure: false,
+                          inputFormat: FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z]+|\s")),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            height: size.height * 0.08,
-                            width: size.width * 0.8,
-                            decoration: Palette.textBoxDeco,
-                            child: Center(
-                              child: TextFormField(
-                                decoration: TextFieldInputDecoration.phoneField,
-                                onChanged: (value){
-                                  phoneNumber = int.tryParse(value.trim());
-                                },
-                                style: Palette.inputTextStyle,
-                                keyboardType: TextInputType.phone,
-                                textInputAction: TextInputAction.next,
-                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                              ),
-                            ),
-                          ),
+                        InputField(
+                          controller: _phoneController,
+                          isObscure: false,
+                          icon: FontAwesomeIcons.phone,
+                          hintText: 'Phone Number',
+                          inputAction: TextInputAction.next,
+                          inputType: TextInputType.phone,
+                          inputFormat: FilteringTextInputFormatter.digitsOnly,
                         ),
-                        Padding(
-                          // TODO: after the email goes out the textfield, the text get's small
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            height: size.height * 0.08,
-                            width: size.width * 0.8,
-                            decoration: Palette.textBoxDeco,
-                            child: Center(
-                              child: TextFormField(
-                                decoration: TextFieldInputDecoration.emailField,
-                                onChanged: (value){
-                                  email = value.trim();
-                                },
-                                style: Palette.inputTextStyle,
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                              ),
-                            ),
-                          ),
+                        InputField(
+                          controller: _emailController,
+                          inputAction: TextInputAction.next,
+                          inputType: TextInputType.emailAddress,
+                          hintText: 'Email',
+                          icon: FontAwesomeIcons.envelope,
+                          isObscure: false,
+                          //inputFormat: FilteringTextInputFormatter.singleLineFormatter,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            height: size.height * 0.08,
-                            width: size.width * 0.8,
-                            decoration: Palette.textBoxDeco,
-                            child: Center(
-                              child: TextFormField(
-                                decoration: TextFieldInputDecoration.passwordField,
-                                onChanged: (value){
-                                  password = value;
-                                },
-                                obscureText: true,
-                                style: Palette.inputTextStyle,
-                                textInputAction: TextInputAction.next,
-                              ),
-                            ),
-                          ),
+                        InputField(
+                          isObscure: true,
+                          icon: FontAwesomeIcons.lock,
+                          hintText: 'Password',
+                          inputAction: TextInputAction.next,
+                          controller: _passwordController,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            height: size.height * 0.08,
-                            width: size.width * 0.8,
-                            decoration: Palette.textBoxDeco,
-                            child: Center(
-                              child: TextFormField(
-                                decoration: TextFieldInputDecoration.confirmPasswordField,
-                                onChanged: (value){
-                                  confirmPassword = value;
-                                },
-                                obscureText: true,
-                                style: Palette.inputTextStyle,
-                                textInputAction: TextInputAction.done,
-                              ),
-                            ),
-                          ),
+                        InputField(
+                          controller: _cPasswordController,
+                          inputAction: TextInputAction.done,
+                          hintText: 'Confirm Password',
+                          icon: FontAwesomeIcons.lock,
+                          isObscure: true,
                         ),
                         SizedBox(
                           height: 25,
@@ -201,6 +152,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: TextButton(
                             onPressed: () async {
                               // TODO: make a class to validate all of them in a single go and put the whole validation class in another file
+                              name = _nameController.text.trim();
+                              phoneNumber = int.tryParse(_phoneController.text.trim());
+                              email = _emailController.text.trim();
+                              password = _passwordController.text;
+                              confirmPassword = _cPasswordController.text;
                               String showError = CredentialValidation().registerValidation(name: name, phone: phoneNumber, email: email, password: password, confirmPassword: confirmPassword);
                               if(showError == null){
                                 setState(() {
@@ -220,6 +176,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                       duration: Duration(seconds: 5),
                                     )
                                   );
+                                  // TODO: solve this issue regarding logging again
+                                  await _authorization.signOutApp();
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(builder: (context) => LoginPage()),
