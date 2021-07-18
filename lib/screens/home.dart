@@ -1,4 +1,5 @@
 import 'package:door_shop/services/authentication_services/authorization.dart';
+import 'package:door_shop/services/utility.dart';
 import 'package:door_shop/widgets/loading.dart';
 import 'package:flutter/material.dart';
 
@@ -18,22 +19,39 @@ class _HomeState extends State<Home> {
     Size size = MediaQuery.of(context).size;
     return loading ? Loading() : Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Palette.primaryColor,
         elevation: 0,
-        title: Center(
-          child: Text('Door Shop'),
-        ),
+        title: Text('Door Shop'),
         actions: [
-          TextButton.icon(
-            icon: Icon(Icons.person),
-            label: Text('Logout'),
-            onPressed: () async {
-              setState(() {
-                loading = true;
+          PopupMenuButton<int>(
+            itemBuilder: (context) => [
+              PopupMenuItem<int>(
+                value: 0,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.logout,
+                      color: Colors.red,
+                    ),
+                    const SizedBox(
+                      width: 6,
+                    ),
+                    Text('Logout')
+                  ],
+                ),
+              )
+            ],
+            onSelected: (item) async {
+              Future.delayed(const Duration(milliseconds: 500),() async {
+                if(item == 0){
+                  setState(() {
+                    loading = true;
+                  });
+                  await _authorization.signOutApp();
+                }
               });
-              await _authorization.signOutApp();
             },
-          )
+          ),
         ],
       ),
     );
