@@ -49,7 +49,7 @@ class AuthorizationService{
     try {
       return await _authorization.signOut();
     } catch(e) {
-      print(e.toString());
+      //print(e.toString());
       return null;
     }
   }

@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:door_shop/screens/authentication_screens/login.dart';
+import 'package:door_shop/screens/home.dart';
 import 'package:door_shop/services/authentication_services/authorization.dart';
 import 'package:door_shop/services/utility.dart';
 import 'package:door_shop/services/authentication_services/validate.dart';
@@ -14,8 +15,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // TODO: put up a screening if that contact-number/email already exists and if not then go forward with the registration
 
 class RegisterPage extends StatefulWidget {
-  //final Function toggleView;
-  //RegisterPage({@required this.toggleView});
+  final Function toggleView;
+  RegisterPage({@required this.toggleView});
 
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -168,8 +169,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                     loading = false;
                                     showError = 'Email already exists!';
                                   });
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
+                                } /*else {
+                                  /*ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text('Email Registered, Please login!'),
                                       backgroundColor: Palette.primaryColor.withOpacity(0.4),
@@ -182,8 +183,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                       context,
                                       MaterialPageRoute(builder: (context) => LoginPage()),
                                       ModalRoute.withName('/')
-                                  );
-                                }
+                                  );*/
+                                  // TODO: make it login again thing
+                                  /*Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => Home()),
+                                    ModalRoute.withName('/')
+                                  );*/
+                                }*/
                                 /*print(name);
                                 print(phoneNumber);
                                 print(email);
@@ -218,11 +225,12 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             GestureDetector(
                               onTap: (){
-                                Navigator.pushAndRemoveUntil(
+                                widget.toggleView();
+                                /*Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(builder: (context) => LoginPage()),
                                     ModalRoute.withName('/')
-                                );
+                                );*/
                               },
                               child: Text(
                                 'Login',

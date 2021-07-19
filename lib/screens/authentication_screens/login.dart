@@ -19,8 +19,8 @@ import 'package:flutter/services.dart';
 // TODO: Add page opening animation, to make it look good or go aournd the toggleview somehow
 
 class LoginPage extends StatefulWidget {
-  //final Function toggleView;
-  //LoginPage({this.toggleView});
+  final Function toggleView;
+  LoginPage({this.toggleView});
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -164,12 +164,12 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         GestureDetector(
                           onTap: (){
-                            //widget.toggleView();
-                            Navigator.pushAndRemoveUntil(
+                            widget.toggleView();
+                            /*Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(builder: (context) => RegisterPage()),
                               ModalRoute.withName('/')
-                            );
+                            );*/
                           },
                           child: Container(
                             child: Text(
