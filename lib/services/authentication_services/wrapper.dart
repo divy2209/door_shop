@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final userData = Provider.of<DoorShop>(context);
+    final userData = Provider.of<DoorShopID>(context);
   // TODO: if there's an error at register page, will that be taking us back to login page, if yes then change this into toggle switch
     if(userData == null){
       return AuthenticationPage();

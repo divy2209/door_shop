@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 class AuthorizationService{
   final FirebaseAuth _authorization = FirebaseAuth.instance;
 
-  DoorShop _userFromFirebase(User user){
-    return user != null ? DoorShop(uid: user.uid) : null;
+  DoorShopID _userFromFirebase(User user){
+    return user != null ? DoorShopID(uid: user.uid) : null;
   }
 
-  Stream<DoorShop> get user {
+  Stream<DoorShopID> get user {
     return _authorization.authStateChanges().map((_userFromFirebase));
   }
 
