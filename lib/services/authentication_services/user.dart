@@ -1,4 +1,4 @@
-class UserID{
-  UserID({this.uid});
+class DoorShop{
+  DoorShop({this.uid});
   final String uid;
 }
