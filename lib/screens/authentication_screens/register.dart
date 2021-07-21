@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:door_shop/screens/authentication_screens/login.dart';
 import 'package:door_shop/screens/home.dart';
 import 'package:door_shop/services/authentication_services/authorization.dart';
+import 'package:door_shop/services/database/user_data.dart';
 import 'package:door_shop/services/utility.dart';
 import 'package:door_shop/services/authentication_services/validate.dart';
 import 'package:door_shop/widgets/background_image.dart';
@@ -196,6 +197,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                 print(email);
                                 print(password);
                                 print(confirmPassword);*/
+                                print(LocalDatabase.userID);
+                                print(LocalDatabase.email);
+                                print(LocalDatabase.name);
+                                print(LocalDatabase.phone);
                               }
                               if(showError != null){
                                 ScaffoldMessenger.of(context).showSnackBar(

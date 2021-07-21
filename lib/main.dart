@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // TODO: Autocorrect functionality
 // TODO: put 'back' button working on every page
@@ -34,6 +35,8 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
   ]);
+
+  DoorShop.sharedPreferences = await SharedPreferences.getInstance();
   runApp(MyApp());
 }
 

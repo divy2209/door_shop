@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UserDatabase {
   final String uid;
@@ -9,6 +8,7 @@ class UserDatabase {
 
   Future updateUserProfile({String name, int phone, String email}) async {
     return await profile.doc(uid).set({
+      'uid' : uid,
       'name': name,
       'phone number': phone,
       'email': email
@@ -17,5 +17,8 @@ class UserDatabase {
 }
 
 class LocalDatabase {
-
+  static final String name = 'name';
+  static final String email = 'email';
+  static final String userID = 'uid';
+  static final String phone = 'phone';
 }
