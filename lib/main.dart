@@ -40,7 +40,7 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<UserID>.value(
+    return StreamProvider<DoorShop>.value(
       value: AuthorizationService().user,
       initialData: null,
       child: MaterialApp(
