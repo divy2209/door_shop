@@ -1,7 +1,8 @@
-import 'package:door_shop/screens/walkthrough_screen/tutorial_old.dart';
+//import 'package:door_shop/screens/walkthrough_screen/tutorial_old.dart';
 import 'package:door_shop/services/authentication_services/authorization.dart';
 import 'package:door_shop/services/authentication_services/user.dart';
 import 'package:door_shop/services/authentication_services/wrapper.dart';
+import 'package:door_shop/services/config.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

@@ -1,11 +1,8 @@
 import 'package:door_shop/services/authentication_services/authorization.dart';
 import 'package:door_shop/services/authentication_services/validate.dart';
-import 'package:door_shop/services/database/user_data.dart';
 import 'package:door_shop/widgets/background_image.dart';
-import 'package:door_shop/widgets/button.dart';
 import 'package:door_shop/widgets/loading.dart';
 import 'package:door_shop/widgets/text_field.dart';
-import 'package:flutter/animation.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../screens.dart';
@@ -138,15 +135,8 @@ class _LoginPageState extends State<LoginPage> {
                                     } else {
                                       showError = "Incorrect password!";
                                     }
-                                    //print(showError);
                                   });
                                 }
-                                //print(email/*phoneNumber*/);
-                                //print(password);
-                                print(LocalDatabase.userID);
-                                print(LocalDatabase.email);
-                                print(LocalDatabase.name);
-                                print(LocalDatabase.phone);
                               }
                               if(showError != null){
                                 ScaffoldMessenger.of(context).showSnackBar(

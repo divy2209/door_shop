@@ -1,8 +1,5 @@
 import 'dart:ui';
-import 'package:door_shop/screens/authentication_screens/login.dart';
-import 'package:door_shop/screens/home.dart';
 import 'package:door_shop/services/authentication_services/authorization.dart';
-import 'package:door_shop/services/database/user_data.dart';
 import 'package:door_shop/services/utility.dart';
 import 'package:door_shop/services/authentication_services/validate.dart';
 import 'package:door_shop/widgets/background_image.dart';
@@ -170,37 +167,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     loading = false;
                                     showError = 'Email already exists!';
                                   });
-                                } /*else {
-                                  /*ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Email Registered, Please login!'),
-                                      backgroundColor: Palette.primaryColor.withOpacity(0.4),
-                                      duration: Duration(seconds: 5),
-                                    )
-                                  );
-                                  // TODO: solve this issue regarding logging again
-                                  await _authorization.signOutApp();
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => LoginPage()),
-                                      ModalRoute.withName('/')
-                                  );*/
-                                  // TODO: make it login again thing
-                                  /*Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => Home()),
-                                    ModalRoute.withName('/')
-                                  );*/
-                                }*/
-                                /*print(name);
-                                print(phoneNumber);
-                                print(email);
-                                print(password);
-                                print(confirmPassword);*/
-                                print(LocalDatabase.userID);
-                                print(LocalDatabase.email);
-                                print(LocalDatabase.name);
-                                print(LocalDatabase.phone);
+                                }
                               }
                               if(showError != null){
                                 ScaffoldMessenger.of(context).showSnackBar(

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../config.dart';
+
 class UserDatabase {
   final String uid;
   UserDatabase({this.uid});
@@ -14,11 +16,16 @@ class UserDatabase {
       'email': email
     });
   }
-}
 
-class LocalDatabase {
-  static final String name = 'name';
-  static final String email = 'email';
-  static final String userID = 'uid';
-  static final String phone = 'phone';
+  Future<void> localDataStorage() async {
+    print(uid);
+    if(uid != null) {
+      profile.doc(uid).get().then((dataSnap) async {
+        await DoorShop.sharedPreferences.setString(DoorShop.userID, dataSnap.get(DoorShop.userID));
+        await DoorShop.sharedPreferences.setString(DoorShop.email, dataSnap.get(DoorShop.email));
+        await DoorShop.sharedPreferences.setString(DoorShop.name, dataSnap.get(DoorShop.name));
+        await DoorShop.sharedPreferences.setInt(DoorShop.phone, dataSnap.get(DoorShop.phone));
+      });
+    }
+  }
 }
