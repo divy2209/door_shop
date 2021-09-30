@@ -1,6 +1,10 @@
+import 'package:door_shop/services/config.dart';
+import 'package:door_shop/services/provider_data/login_data.dart';
+import 'package:door_shop/services/provider_data/register_data.dart';
 import 'package:door_shop/services/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class InputField extends StatelessWidget {
 
@@ -11,16 +15,18 @@ class InputField extends StatelessWidget {
   final IconData icon;
   final String hintText;
   final FilteringTextInputFormatter inputFormat;
+  final String form;
 
   const InputField({
     Key key,
-    @required this.isObscure,
+    this.isObscure,
     @required this.inputAction,
     this.inputType,
     @required this.controller,
     @required this.icon,
     @required this.hintText,
-    this.inputFormat
+    this.inputFormat,
+    @required this.form
   }) : super(key: key);
 
   @override
@@ -48,8 +54,15 @@ class InputField extends StatelessWidget {
               hintText: hintText,
               hintStyle: Palette.inputTextStyle
             ),
+            onChanged: (value){
+              if(form == FormIdentifier.login){
+                Provider.of<LoginData>(context, listen: false).login(value, hintText);
+              } else if(form == FormIdentifier.register){
+                Provider.of<RegisterData>(context, listen: false).register(value, hintText);
+              }
+            },
             style: Palette.inputTextStyle,
-            obscureText: isObscure,
+            obscureText: isObscure!=null ? isObscure : false,
             keyboardType: inputType,
             textInputAction: inputAction,
             inputFormatters: [inputFormat ?? FilteringTextInputFormatter.singleLineFormatter],

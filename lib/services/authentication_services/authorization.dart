@@ -2,6 +2,7 @@ import 'package:door_shop/services/config.dart';
 import 'package:door_shop/services/database/user_data.dart';
 import 'package:door_shop/services/authentication_services/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 
@@ -30,7 +31,7 @@ class AuthorizationService{
     }
   }
 
-  Future register({@required String name, @required int phone, @required String email, @required String password}) async {
+  Future register({@required String name, @required int phone, @required String email, @required String password, @required String url}) async {
     try {
       UserCredential result = await _authorization.createUserWithEmailAndPassword(email: email, password: password);
       User user = result.user;
@@ -39,6 +40,7 @@ class AuthorizationService{
         name: name,
         phone: phone,
         email: email,
+        url: url
       );
 
       UserDatabase(uid: user.uid).localDataStorage();

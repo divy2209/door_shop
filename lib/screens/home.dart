@@ -1,59 +1,76 @@
-import 'package:door_shop/services/authentication_services/authorization.dart';
+import 'package:door_shop/screens/cart.dart';
+import 'package:door_shop/services/database/crop_data.dart';
+import 'package:door_shop/services/database/crop_model.dart';
+import 'package:door_shop/services/provider_data/cart_data.dart';
+import 'package:door_shop/services/provider_data/authenticate_data.dart';
 import 'package:door_shop/services/utility.dart';
+import 'package:door_shop/widgets/drawer.dart';
+import 'package:door_shop/widgets/home_widgets/croplist.dart';
 import 'package:door_shop/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // TODO: Add refresh functionality to update the pricing
 
-class Home extends StatefulWidget {
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  final AuthorizationService _authorization = AuthorizationService();
-  bool loading = false;
+class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return loading ? Loading() : Scaffold(
-      appBar: AppBar(
-        backgroundColor: Palette.primaryColor,
-        elevation: 0,
-        title: Text('Door Shop'),
-        actions: [
-          PopupMenuButton<int>(
-            itemBuilder: (context) => [
-              PopupMenuItem<int>(
-                value: 0,
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.logout,
-                      color: Colors.red,
+    return Consumer<AuthenticatingData>(
+      builder: (context, authenticate, child){
+        return authenticate.pageloading ? Loading() : Scaffold(
+            appBar: AppBar(
+              backgroundColor: Palette.primaryColor,
+              elevation: 0,
+              title: Center(child: Text('Door Shop')),
+              centerTitle: true,
+              actions: [
+                Container(
+                  height: 150,
+                  width: 50,
+                  child: Center(
+                    child: Stack(
+                      children: [
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => CartScreen())
+                            );
+                          },
+                          child: Container(
+                            height: 50,
+                            width: 45,
+                            child: Icon(Icons.shopping_cart)
+                          ),
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: CircleAvatar(
+                            radius: 9,
+                            backgroundColor: Colors.red,
+                            child: Consumer<CartData>(
+                              builder: (_,cart,___){
+                                return Text(cart.count.toString(), style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w800),);
+                              },
+                            )
+                          ),
+                        )
+                      ],
                     ),
-                    const SizedBox(
-                      width: 6,
-                    ),
-                    Text('Logout')
-                  ],
+                  ),
                 ),
-              )
-            ],
-            onSelected: (item) async {
-              Future.delayed(const Duration(milliseconds: 500),() async {
-                if(item == 0){
-                  setState(() {
-                    loading = true;
-                  });
-                  await _authorization.signOutApp();
-                }
-              });
-            },
-          ),
-        ],
-      ),
+              ],
+            ),
+            drawer: CustomDrawer(),
+            body: StreamProvider<List<Crop>>.value(
+              value: CropDatabase().cropsData,
+              initialData: null,
+              child: CropList(),
+            )
+        );
+      },
     );
   }
 }

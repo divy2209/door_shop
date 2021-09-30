@@ -51,6 +51,20 @@ class Validation{
       return 'Passwords does not match';
     }
   }
+
+  String AddressValidation({@required address, @required city, @required state, @required pin}){
+    if (address != null && city != null && state != null && pin != null) {
+      return null;
+    } else if(address == null){
+      return "Address field cannot be left empty!";
+    } else if(city == null){
+      return "City field cannot be left empty!";
+    } else if(state == null){
+      return "State field cannot be left empty!";
+    } else if(pin == null){
+      return "Pin Code field cannot be left empty!";
+    }
+  }
 }
 
 class CredentialValidation {

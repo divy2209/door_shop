@@ -3,6 +3,9 @@ import 'package:door_shop/services/authentication_services/authorization.dart';
 import 'package:door_shop/services/authentication_services/user.dart';
 import 'package:door_shop/services/authentication_services/wrapper.dart';
 import 'package:door_shop/services/config.dart';
+import 'package:door_shop/services/provider_data/address_data.dart';
+import 'package:door_shop/services/provider_data/cart_data.dart';
+import 'package:door_shop/services/provider_data/authenticate_data.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,19 +50,42 @@ class MyApp extends StatelessWidget {
     return StreamProvider<DoorShopID>.value(
       value: AuthorizationService().user,
       initialData: null,
-      child: MaterialApp(
-        title: "Door Shop",
-        theme: ThemeData(
-          // TODO: Check if this visualDensity code helps/changes or not
-          visualDensity: VisualDensity.adaptivePlatformDensity
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => CartData()),
+          ChangeNotifierProvider(create: (_) => AuthenticatingData()),
+          ChangeNotifierProvider(create: (_) => AddressData())
+        ],
+        child: MaterialApp(
+          title: "Door Shop",
+          theme: ThemeData(
+            // TODO: Check if this visualDensity code helps/changes or not
+              visualDensity: VisualDensity.adaptivePlatformDensity
+          ),
+          // TODO: Make this tutorial class of walkthrough one timer by using sharedPreference package
+          // TODO: Debate on the 3rd screen for earning rewards on walkthrough
+          home: Wrapper(),
+          //home: Tutorial(),
+          // TODO: Changing the overall app font
+          debugShowCheckedModeBanner: false,
         ),
-        // TODO: Make this tutorial class of walkthrough one timer by using sharedPreference package
-        // TODO: Debate on the 3rd screen for earning rewards on walkthrough
-        home: Wrapper(),
-        //home: Tutorial(),
-        // TODO: Changing the overall app font
-        debugShowCheckedModeBanner: false,
       ),
+      /*child: ChangeNotifierProvider(
+        create: (_) => CartData(),
+        child: MaterialApp(
+          title: "Door Shop",
+          theme: ThemeData(
+            // TODO: Check if this visualDensity code helps/changes or not
+            visualDensity: VisualDensity.adaptivePlatformDensity
+          ),
+          // TODO: Make this tutorial class of walkthrough one timer by using sharedPreference package
+          // TODO: Debate on the 3rd screen for earning rewards on walkthrough
+          home: Wrapper(),
+          //home: Tutorial(),
+          // TODO: Changing the overall app font
+          debugShowCheckedModeBanner: false,
+        ),
+      ),*/
     );
   }
 }
