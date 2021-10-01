@@ -7,6 +7,11 @@ class AddressData extends ChangeNotifier{
   String state;
   int pin;
 
+  bool loading = false;
+  bool running = false;
+
+  List<String> completeAddress = [];
+
   void input(String hint, String str){
     if(hint == AddressFieldHint.address){
       address = str;
@@ -31,9 +36,27 @@ class AddressData extends ChangeNotifier{
   }
 
   void update(){
+    completeAddress.clear();
     DoorShop.sharedPreferences.setString(DoorShop.address, address);
     DoorShop.sharedPreferences.setString(DoorShop.city, city);
     DoorShop.sharedPreferences.setString(DoorShop.state, state);
     DoorShop.sharedPreferences.setInt(DoorShop.pin, pin);
+
+    completeAddress.add(address);
+    completeAddress.add(city);
+    completeAddress.add(state);
+    completeAddress.add(pin.toString());
+
+    notifyListeners();
+  }
+
+  void buttonLoading(){
+    loading = !loading;
+    notifyListeners();
+  }
+
+  void processRunning(){
+    running = !running;
+    notifyListeners();
   }
 }

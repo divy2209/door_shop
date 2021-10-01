@@ -16,7 +16,7 @@ class CheckoutList extends StatelessWidget {
         itemBuilder: (context, index){
           final CartCrop crop = cart.cart[index];
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+            padding: const EdgeInsets.symmetric(vertical: 8,),
             child: Row(
               children: [
                 Container(
@@ -25,6 +25,7 @@ class CheckoutList extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(crop.name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                      SizedBox(height: 5,),
                       Row(
                         children: [
                           SizedBox(width: 10,),
@@ -39,7 +40,15 @@ class CheckoutList extends StatelessWidget {
                   child: Center(child: Text(crop.count.toString(), style: TextStyle(fontSize: 14),)),
                 ),
                 SizedBox(width: 20,),
-                Text('\u{20B9}' + (crop.price*crop.count).toString(), style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                Container(
+                  width: 78,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text('\u{20B9}' + (crop.price*crop.count).toString(), style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                    ],
+                  )
+                ),
               ],
             ),
           );

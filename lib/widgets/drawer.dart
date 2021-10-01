@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:door_shop/screens/my_account.dart';
 import 'package:door_shop/services/authentication_services/authorization.dart';
 import 'package:door_shop/services/config.dart';
 import 'package:door_shop/services/provider_data/authenticate_data.dart';
@@ -58,12 +59,23 @@ class CustomDrawer extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Divider(color: Colors.black, height: 2,),
+            TextButton(
+              child: Text("My Account"),
+              onPressed: (){
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context)=> MyAccount())
+                );
+              },
+            ),
             InkWell(
               onTap: () async {
                 authenticate.pageLoading();
                 Future.delayed(const Duration(milliseconds: 500),() async {
                   await _authorization.signOutApp();
                 });
+                authenticate.pageLoading();
               },
               child: Container(
                 child: Row(

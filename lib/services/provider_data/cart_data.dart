@@ -1,12 +1,23 @@
+import 'package:door_shop/services/config.dart';
 import 'package:door_shop/services/database/crop_data.dart';
 import 'package:door_shop/services/database/crop_model.dart';
+import 'package:door_shop/services/database/order_data.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CartData extends ChangeNotifier{
   int count = 0;
   List<CartCrop> cart = [];
   int total = 0;
   int gtotal = 0;
+
+  bool loading = false;
+  bool running = false;
+
+  List<String> crops = [];
+  List<int> prices = [];
+  List<int> discounts = [];
+  List<int> quantities = [];
 
   int addToCart(Crop crop){
     int flag = 0;
@@ -63,6 +74,7 @@ class CartData extends ChangeNotifier{
     } else if(quantity==cart[index].count){
       flag = 1;
     } else {
+      gtotal-=(cart[index].count-quantity)*cart[index].dPrice;
       total-=(cart[index].count-quantity)*cart[index].price;
       cart[index].count = quantity;
     }
@@ -122,15 +134,55 @@ class CartData extends ChangeNotifier{
     return flag;
   }
 
-  Future<void> placeOrder() async {
+  Future<int> placeOrder(List<String> address) async {
     for(int i = 0; i<count; i++){
+      crops.add(cart[i].identifier);
+      prices.add(cart[i].price);
+      discounts.add(cart[i].discount);
+      quantities.add(cart[i].count);
       await CropDatabase().updateQuantity(uid: cart[i].identifier, count: cart[i].count);
     }
+
+    String dateTime = DateFormat.yMMMMd('en_US').add_jm().format(DateTime.now());
+    await OrderDatabase().placeOrder(
+      uid: DoorShop.sharedPreferences.getString(DoorShop.userID),
+      orderID: DateTime.now().millisecondsSinceEpoch.toString(),
+      crops: crops,
+      prices: prices,
+      discounts: discounts,
+      quantities: quantities,
+      total: gtotal,
+      status: 'Order Placed',
+      address: address,
+      dateTime: dateTime,
+    );
+    int temp = gtotal;
+    resetCart();
+    notifyListeners();
+    return temp;
+  }
+
+  void resetCart() {
     cart.clear();
     total = 0;
     gtotal = 0;
     count = 0;
 
+    crops.clear();
+    prices.clear();
+    discounts.clear();
+    quantities.clear();
+
+    notifyListeners();
+  }
+
+  void buttonLoading(){
+    loading = !loading;
+    notifyListeners();
+  }
+
+  void processRunning(){
+    running = !running;
     notifyListeners();
   }
 

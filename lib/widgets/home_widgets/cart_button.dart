@@ -8,6 +8,7 @@ import 'package:door_shop/services/provider_data/address_data.dart';
 import 'package:door_shop/services/provider_data/cart_data.dart';
 import 'package:door_shop/services/utility.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class CartButton extends StatelessWidget {
@@ -26,46 +27,48 @@ class CartButton extends StatelessWidget {
     final address = Provider.of<AddressData>(context, listen: false);
     return InkWell(
       borderRadius: BorderRadius.circular(radius),
-      splashColor: Palette.primaryColor,
+      splashColor: !cart.running ? Palette.primaryColor : Colors.white,
+
       onTap: () async{
         String showError;
         String showMessage;
+        String message;
+
         if(type==CartButtonIdentifier.home){
           int flag = cart.addToCart(crop);
           if(flag==1){
-
+            showMessage = "Inventory Limit!";
+            message = "This is the limiting quantity for this vegetable, we're working to increase the inventory";
           } else if(flag==2){
-
+            showMessage = "Inventory Exceeded!";
+            message = "The cart quantity is been reset due to inventory exceeding";
           }
         } else if(type==CartButtonIdentifier.cartPlus){
           int flag = await cart.addCart(index);
           if(flag==1){
-
+            showMessage = "Inventory Limit!";
+            message = "This is the limiting quantity for this vegetable, we're working to increase the inventory";
           } else if(flag==2){
-
+            showMessage = "Inventory Exceeded!";
+            message = "The cart quantity is been reset due to inventory exceeding, we're working to increase the inventory";
           }
         } else if(type==CartButtonIdentifier.cartMinus){
           int flag = await cart.substractCart(index);
           if(flag==1){
-
+            showMessage = "Inventory Exceeded!";
+            message = "The cart quantity is been reset due to inventory exceeding, we're working to increase the inventory";
           }
         } else if(type==CartButtonIdentifier.proceed){
           if(cart.count==0){
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text("Add some Veggies to the cart first!"),
-                  backgroundColor: Palette.primaryColor.withOpacity(0.5),
-                  duration: Duration(seconds: 5),
-                )
-            );
+            showError = "Add some Veggies to the cart first!";
           } else {
-            address.store();
             Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CheckoutScreen())
             );
           }
-        } else if(type==CartButtonIdentifier.order){
+        } else if(type==CartButtonIdentifier.order && !cart.running){
+          cart.processRunning();
           showError = Validation().AddressValidation(
             address: address.address,
             city: address.city,
@@ -73,15 +76,15 @@ class CartButton extends StatelessWidget {
             pin: address.pin
           );
           if(showError==null){
+            cart.buttonLoading();
             address.update();
-            await UserDatabase().updateAddress(address: address.address, city: address.city, state: address.state, pin: address.pin);
-            await cart.placeOrder();
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context)=> Home()),
-                (route) => false
-            );
+            await UserDatabase().updateAddress(completeAddress: address.completeAddress);
+            int amount = await cart.placeOrder(address.completeAddress);
+            cart.buttonLoading();
+            showMessage = "Order Placed!";
+            message = "Your order has been placed, please pay " + '\u{20B9}' + "$amount on delivery";
           }
+          cart.processRunning();
         }
 
         if(showError!=null){
@@ -93,6 +96,42 @@ class CartButton extends StatelessWidget {
             )
           );
         }
+
+        if(showMessage!=null && message!=null){
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: Text(showMessage),
+              content: Text(message),
+              actions: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: Center(
+                    child: TextButton(
+                      child: Container(
+                        width: 200,
+                        child: Center(
+                           child: Text('Okay'),
+                        ),
+                      ),
+                      onPressed: (){
+                        if(type==CartButtonIdentifier.order){
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context)=> Home()),
+                                  (route) => false
+                          );
+                        } else {
+                          Navigator.pop(context);
+                        }
+                      },
+                    ),
+                  ),
+                )
+              ],
+            )
+          );
+        }
       },
       child: Container(
         height: height!=null ? height : 25,
@@ -100,9 +139,14 @@ class CartButton extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(color: Palette.primaryColor, width: 1),
           borderRadius: BorderRadius.all(Radius.circular(radius)),
-          //color: Palette.primaryColor.withOpacity(0.4)
         ),
-        child: Center(child: Text(label, style: TextStyle(fontWeight: FontWeight.bold),)),
+        child: Center(
+          child: !cart.loading ? Text(label, style: TextStyle(fontWeight: FontWeight.bold),) :
+            SpinKitThreeBounce(
+              color: Palette.primaryColor,
+              size: 20,
+            )
+        ),
       ),
     );
   }
