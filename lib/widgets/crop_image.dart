@@ -7,9 +7,10 @@ class CropImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return CircleAvatar(
       backgroundColor: Colors.transparent,
-      radius: 40,
+      radius: size.width*0.111,
       child: CachedNetworkImage(
           imageUrl: url,
           progressIndicatorBuilder: (context, url,
@@ -19,8 +20,6 @@ class CropImage extends StatelessWidget {
                 color: Colors.black,),
           imageBuilder: (context, imageProvider) =>
               Container(
-                width: 80,
-                height: 80,
                 decoration: BoxDecoration(
                     shape:BoxShape.circle,
                     image:DecorationImage(

@@ -75,11 +75,26 @@ class CheckoutScreen extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text('\u{20B9}' + cart.total.toString(), style: TextStyle(color: Colors.grey),),
+                        Row(
+                          children: [
+                            Text('\u{20B9}' + cart.total.toString(), style: TextStyle(color: Colors.grey),),
+                            SizedBox(width: 10,)
+                          ],
+                        ),
                         SizedBox(height: 5,),
-                        Text('- ' + '\u{20B9}' + (cart.total-cart.gtotal).toString(), style: TextStyle(color: Colors.grey),),
+                        Row(
+                          children: [
+                            Text('- ' + '\u{20B9}' + (cart.total-cart.gtotal).toString(), style: TextStyle(color: Colors.grey),),
+                            SizedBox(width: 10,)
+                          ],
+                        ),
                         SizedBox(height: 20,),
-                        Text('\u{20B9}' + cart.gtotal.toString())
+                        Row(
+                          children: [
+                            Text('\u{20B9}' + cart.gtotal.toString()),
+                            SizedBox(width: 10,)
+                          ],
+                        )
                       ],
                     )
                   ],

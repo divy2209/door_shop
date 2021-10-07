@@ -9,6 +9,9 @@ class LoginData extends ChangeNotifier {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  bool running = false;
+  bool loading = false;
+
   void login(String str, String hint){
     if(hint == TextFieldHint.email){
       email = str;
@@ -24,6 +27,15 @@ class LoginData extends ChangeNotifier {
     notifyListeners();
   }
 
+  void processRunning(){
+    running = !running;
+    notifyListeners();
+  }
+
+  void buttonLoading(){
+    loading = !loading;
+    notifyListeners();
+  }
 
   @override
   void dispose(){

@@ -1,7 +1,9 @@
 import 'package:door_shop/services/config.dart';
+import 'package:door_shop/services/database/cart_data.dart';
 import 'package:door_shop/services/database/crop_data.dart';
 import 'package:door_shop/services/database/crop_model.dart';
 import 'package:door_shop/services/database/order_data.dart';
+import 'package:door_shop/services/models/cart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -18,8 +20,11 @@ class CartData extends ChangeNotifier{
   List<int> prices = [];
   List<int> discounts = [];
   List<int> quantities = [];
+  List<String> units = [];
 
-  int addToCart(Crop crop){
+  List<String> identifiers = [];
+
+  Future<int> addToCart(Crop crop) async{
     int flag = 0;
     int index;
     int n = cart.length;
@@ -28,6 +33,7 @@ class CartData extends ChangeNotifier{
         if(crop.quantity>cart[i].count){
           index = i;
           cart[i].count += 1;
+          quantities[i]+=1;
           gtotal+=cart[i].dPrice;
           total+=cart[i].price;
         } else {
@@ -37,6 +43,7 @@ class CartData extends ChangeNotifier{
             gtotal-=(cart[i].count-crop.quantity)*cart[i].dPrice;
             total-=(cart[i].count-crop.quantity)*cart[i].price;
             cart[i].count = crop.quantity;
+            quantities[i] = crop.quantity;
           } else flag = 1;
         }
         break;
@@ -59,7 +66,15 @@ class CartData extends ChangeNotifier{
       total+=c.price;
       cart.add(c);
       count = cart.length;
+
+      identifiers.add(crop.identifier);
+      crops.add(crop.name);
+      prices.add(crop.price);
+      discounts.add(crop.discount);
+      quantities.add(1);
+      units.add(crop.unit);
     }
+    await CartDatabase().updateCart(identifiers: identifiers, quantities: quantities, uid: DoorShop.sharedPreferences.getString(DoorShop.userID));
     notifyListeners();
     return flag;
   }
@@ -69,6 +84,7 @@ class CartData extends ChangeNotifier{
     int quantity = await CropDatabase().getQuantity(cart[index].identifier);
     if(quantity>cart[index].count){
       cart[index].count += 1;
+      quantities[index] += 1;
       gtotal+=cart[index].dPrice;
       total+=cart[index].price;
     } else if(quantity==cart[index].count){
@@ -77,8 +93,9 @@ class CartData extends ChangeNotifier{
       gtotal-=(cart[index].count-quantity)*cart[index].dPrice;
       total-=(cart[index].count-quantity)*cart[index].price;
       cart[index].count = quantity;
+      quantities[index] = quantity;
     }
-
+    await CartDatabase().updateCart(identifiers: identifiers, quantities: quantities, uid: DoorShop.sharedPreferences.getString(DoorShop.userID));
     notifyListeners();
     return flag;
   }
@@ -91,55 +108,32 @@ class CartData extends ChangeNotifier{
       total-=cart[index].price;
       if(cart[index].count>1){
         cart[index].count -= 1;
+        quantities[index] -= 1;
       } else {
         cart.removeAt(index);
         count--;
+
+        identifiers.removeAt(index);
+        crops.removeAt(index);
+        prices.removeAt(index);
+        discounts.removeAt(index);
+        quantities.removeAt(index);
+        units.removeAt(index);
       }
     } else {
       gtotal-=(cart[index].count-quantity)*cart[index].dPrice;
       total-=(cart[index].count-quantity)*cart[index].price;
       cart[index].count = quantity;
+      quantities[index] = quantity;
       flag = 1;
     }
-
-    notifyListeners();
-    return flag;
-  }
-
-  // todo:function to check availability for a previously added vegetables
-
-  Future<bool> checkOrder() async {
-    // todo: place this check in initstate of home
-    // todo: consider price and discount change
-    bool flag = false;
-    for(int i = 0; i<count; i++){
-      print(cart[i].identifier);
-      int quantity = await CropDatabase().getQuantity(cart[i].identifier);
-      if(quantity==0){
-        count--;
-        gtotal-=cart[i].dPrice*cart[i].count;
-        total-=cart[i].price*cart[i].count;
-        flag=true;
-        cart.removeAt(i);
-        i--;
-      } else if(quantity<cart[i].count){
-        gtotal-=(cart[i].count-quantity)*cart[i].dPrice;
-        total-=(cart[i].count-quantity)*cart[i].price;
-        cart[i].count = quantity;
-        flag=true;
-      }
-    }
-
+    await CartDatabase().updateCart(identifiers: identifiers, quantities: quantities, uid: DoorShop.sharedPreferences.getString(DoorShop.userID));
     notifyListeners();
     return flag;
   }
 
   Future<int> placeOrder(List<String> address) async {
     for(int i = 0; i<count; i++){
-      crops.add(cart[i].identifier);
-      prices.add(cart[i].price);
-      discounts.add(cart[i].discount);
-      quantities.add(cart[i].count);
       await CropDatabase().updateQuantity(uid: cart[i].identifier, count: cart[i].count);
     }
 
@@ -151,18 +145,54 @@ class CartData extends ChangeNotifier{
       prices: prices,
       discounts: discounts,
       quantities: quantities,
+      units: units,
+      subtotal: total,
       total: gtotal,
-      status: 'Order Placed',
+      status: 0,
       address: address,
       dateTime: dateTime,
     );
-    int temp = gtotal;
-    resetCart();
     notifyListeners();
-    return temp;
+    return gtotal;
   }
 
-  void resetCart() {
+  void retrieveCart() async{
+    Cart c = await CartDatabase().getCart();
+    int n = c.identifiers.length;
+
+    for(int i = 0; i<n; i++){
+      String uid = c.identifiers[i].toString();
+      Crop crop = await CropDatabase().getCrop(uid);
+      if(crop.quantity>=c.quantities[i]){
+        CartCrop cc = CartCrop(
+            identifier: crop.identifier,
+            name: crop.name,
+            unit: crop.unit,
+            quantity: crop.quantity,
+            price: crop.price,
+            discount: crop.discount,
+            dPrice: (crop.price*(1-crop.discount/100)).round(),
+            url: crop.url,
+            count: c.quantities[i]
+        );
+        gtotal+=cc.dPrice;
+        total+=cc.price;
+        cart.add(cc);
+        count = cart.length;
+
+        identifiers.add(crop.identifier);
+        crops.add(crop.name);
+        prices.add(crop.price);
+        discounts.add(crop.discount);
+        quantities.add(c.quantities[0]);
+        units.add(crop.unit);
+      }
+    }
+    await CartDatabase().updateCart(identifiers: identifiers, quantities: quantities, uid: DoorShop.sharedPreferences.getString(DoorShop.userID));
+    notifyListeners();
+  }
+
+  void resetCart() async{
     cart.clear();
     total = 0;
     gtotal = 0;
@@ -172,6 +202,10 @@ class CartData extends ChangeNotifier{
     prices.clear();
     discounts.clear();
     quantities.clear();
+    units.clear();
+    identifiers.clear();
+
+    await CartDatabase().updateCart(identifiers: identifiers, quantities: quantities, uid: DoorShop.sharedPreferences.getString(DoorShop.userID));
 
     notifyListeners();
   }

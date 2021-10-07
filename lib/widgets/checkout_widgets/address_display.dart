@@ -9,10 +9,9 @@ class AddressDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool data = DoorShop.sharedPreferences.getString(DoorShop.address)!=null;
     return Consumer<AddressData>(
       builder: (_,address,__){
-        return data ? Row(
+        return address.address!=null ? Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(Icons.location_on),
@@ -21,9 +20,9 @@ class AddressDisplay extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(DoorShop.sharedPreferences.getString(DoorShop.address), overflow: TextOverflow.visible, style: TextStyle(fontSize: 16),),
-                  Text(DoorShop.sharedPreferences.getString(DoorShop.city) + ", " + DoorShop.sharedPreferences.getString(DoorShop.state), style: TextStyle(fontSize: 16)),
-                  Text(DoorShop.sharedPreferences.getInt(DoorShop.pin).toString(), style: TextStyle(fontSize: 16)),
+                  Text(address.address, overflow: TextOverflow.visible, style: TextStyle(fontSize: 16),),
+                  Text(address.city + ", " + address.state, style: TextStyle(fontSize: 16)),
+                  Text(address.pin.toString(), style: TextStyle(fontSize: 16)),
                 ],
               ),
             ),

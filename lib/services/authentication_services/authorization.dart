@@ -1,8 +1,8 @@
 import 'package:door_shop/services/config.dart';
+import 'package:door_shop/services/database/cart_data.dart';
 import 'package:door_shop/services/database/user_data.dart';
 import 'package:door_shop/services/authentication_services/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 
@@ -42,6 +42,7 @@ class AuthorizationService{
         email: email,
         url: url
       );
+      await CartDatabase().updateCart(identifiers: [], quantities: [], uid: user.uid);
 
       UserDatabase(uid: user.uid).localDataStorage();
 

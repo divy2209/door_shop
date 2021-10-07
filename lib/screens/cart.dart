@@ -12,7 +12,6 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final cart = Provider.of<CartData>(context, listen: false);
     return Scaffold(
-
       appBar: AppBar(
         backgroundColor: Palette.primaryColor,
         elevation: 0,
@@ -21,7 +20,10 @@ class CartScreen extends StatelessWidget {
       ),
       body: Consumer<CartData>(
         builder: (_,__,___){
-          return cart.count==0 ? Center(child: Text("How about adding some veggies to your diet!", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),)) : CartList();
+          return cart.count==0 ? Center(child: Text("Add some veggies to your diet!", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),)) : Padding(
+            padding: const EdgeInsets.only(right: 3),
+            child: CartList(),
+          );
         },
       ),
       bottomNavigationBar: BottomAppBar(

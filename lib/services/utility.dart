@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 mixin Palette{
   static Color primaryColor = Vx.hexToColor("#2e8b57");
@@ -25,4 +24,9 @@ mixin Palette{
     height: 1.5,
     fontWeight: FontWeight.bold
   );
+}
+
+mixin Status{
+  static final List<String> status = ['Order Placed', 'Processing', 'In Transit', 'Out for Delivery', 'Delivered'];
+  static final List<Color> statusColor = [Colors.deepOrangeAccent.shade100, Colors.deepOrangeAccent.shade200, Colors.deepOrangeAccent.shade200, Colors.green.shade300, Colors.green];
 }

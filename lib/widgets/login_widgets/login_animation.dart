@@ -5,14 +5,15 @@ class LoginAnimatedText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.all(45),
+      padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 35),
       child: SizedBox(
         child: DefaultTextStyle(
           style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontSize: 60
+              fontSize: size.width*0.15
           ),
           child: AnimatedTextKit(
             isRepeatingAnimation: false,

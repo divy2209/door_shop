@@ -18,6 +18,9 @@ class RegisterData extends ChangeNotifier{
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
+  bool running = false;
+  bool loading = false;
+
   void register(String str, String hint){
     if(hint == TextFieldHint.name){
       name = str;
@@ -53,6 +56,16 @@ class RegisterData extends ChangeNotifier{
     if(pickedFile != null){
       imageFile = File(pickedFile.path);
     }
+    notifyListeners();
+  }
+
+  void processRunning(){
+    running = !running;
+    notifyListeners();
+  }
+
+  void buttonLoading(){
+    loading=!loading;
     notifyListeners();
   }
 

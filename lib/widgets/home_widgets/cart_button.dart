@@ -1,9 +1,8 @@
 import 'package:door_shop/screens/checkout.dart';
 import 'package:door_shop/screens/screens.dart';
-import 'package:door_shop/services/authentication_services/validate.dart';
 import 'package:door_shop/services/config.dart';
+import 'package:door_shop/services/connection.dart';
 import 'package:door_shop/services/database/crop_model.dart';
-import 'package:door_shop/services/database/user_data.dart';
 import 'package:door_shop/services/provider_data/address_data.dart';
 import 'package:door_shop/services/provider_data/cart_data.dart';
 import 'package:door_shop/services/utility.dart';
@@ -35,56 +34,60 @@ class CartButton extends StatelessWidget {
         String message;
 
         if(type==CartButtonIdentifier.home){
-          int flag = cart.addToCart(crop);
-          if(flag==1){
-            showMessage = "Inventory Limit!";
-            message = "This is the limiting quantity for this vegetable, we're working to increase the inventory";
-          } else if(flag==2){
-            showMessage = "Inventory Exceeded!";
-            message = "The cart quantity is been reset due to inventory exceeding";
-          }
+          if(await Connection().hasNetwork()){
+            int flag = await cart.addToCart(crop);
+            if(flag==1){
+              showMessage = "Inventory Limit!";
+              message = "This is the limiting quantity for this vegetable, we're working to increase the inventory";
+            } else if(flag==2){
+              showMessage = "Inventory Exceeded!";
+              message = "The cart quantity is been reset due to inventory exceeding";
+            }
+          } else showError = "Please connect to Internet first!";
         } else if(type==CartButtonIdentifier.cartPlus){
-          int flag = await cart.addCart(index);
-          if(flag==1){
-            showMessage = "Inventory Limit!";
-            message = "This is the limiting quantity for this vegetable, we're working to increase the inventory";
-          } else if(flag==2){
-            showMessage = "Inventory Exceeded!";
-            message = "The cart quantity is been reset due to inventory exceeding, we're working to increase the inventory";
-          }
+          if(await Connection().hasNetwork()){
+            int flag = await cart.addCart(index);
+            if(flag==1){
+              showMessage = "Inventory Limit!";
+              message = "This is the limiting quantity for this vegetable, we're working to increase the inventory";
+            } else if(flag==2){
+              showMessage = "Inventory Exceeded!";
+              message = "The cart quantity is been reset due to inventory exceeding, we're working to increase the inventory";
+            }
+          } else showError = "Please connect to Internet first!";
         } else if(type==CartButtonIdentifier.cartMinus){
-          int flag = await cart.substractCart(index);
-          if(flag==1){
-            showMessage = "Inventory Exceeded!";
-            message = "The cart quantity is been reset due to inventory exceeding, we're working to increase the inventory";
-          }
+          if(await Connection().hasNetwork()){
+            int flag = await cart.substractCart(index);
+            if(flag==1){
+              showMessage = "Inventory Exceeded!";
+              message = "The cart quantity is been reset due to inventory exceeding, we're working to increase the inventory";
+            }
+          } else showError = "Please connect to Internet first!";
         } else if(type==CartButtonIdentifier.proceed){
           if(cart.count==0){
             showError = "Add some Veggies to the cart first!";
           } else {
-            Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CheckoutScreen())
-            );
+            Future.delayed(Duration(milliseconds: 70), (){
+              address.store();
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CheckoutScreen())
+              );
+            });
           }
         } else if(type==CartButtonIdentifier.order && !cart.running){
-          cart.processRunning();
-          showError = Validation().AddressValidation(
-            address: address.address,
-            city: address.city,
-            state: address.state,
-            pin: address.pin
-          );
-          if(showError==null){
-            cart.buttonLoading();
-            address.update();
-            await UserDatabase().updateAddress(completeAddress: address.completeAddress);
-            int amount = await cart.placeOrder(address.completeAddress);
-            cart.buttonLoading();
-            showMessage = "Order Placed!";
-            message = "Your order has been placed, please pay " + '\u{20B9}' + "$amount on delivery";
-          }
-          cart.processRunning();
+          if(await Connection().hasNetwork()){
+            cart.processRunning();
+            if(showError==null){
+              cart.buttonLoading();
+              address.update();
+              int amount = await cart.placeOrder(address.completeAddress);
+              cart.buttonLoading();
+              showMessage = "Order Placed!";
+              message = "Your order has been placed, please pay " + '\u{20B9}' + "$amount on delivery";
+            }
+            cart.processRunning();
+          } else showError = "Please connect to Internet first!";
         }
 
         if(showError!=null){
@@ -116,6 +119,7 @@ class CartButton extends StatelessWidget {
                       ),
                       onPressed: (){
                         if(type==CartButtonIdentifier.order){
+                          cart.resetCart();
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(builder: (context)=> Home()),

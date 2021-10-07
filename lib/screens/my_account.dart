@@ -20,7 +20,7 @@ class MyAccount extends StatelessWidget {
         centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.all(40),
+        padding: EdgeInsets.all(size.width*0.08),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -49,16 +49,17 @@ class MyAccount extends StatelessWidget {
                           )
                   ),
                 ),
-                SizedBox(width: 30,),
-                Column(
-                  //mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(DoorShop.sharedPreferences.getString(DoorShop.name), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 25,),
-                    Text(DoorShop.sharedPreferences.getString(DoorShop.email), style: TextStyle(fontSize: 16, color: Colors.grey, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,),
-                    Text("+91 " + DoorShop.sharedPreferences.getInt(DoorShop.phone).toString(), style: TextStyle(fontSize: 16, color: Colors.grey, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,)
-                  ],
+                SizedBox(width: size.width*0.06,),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(DoorShop.sharedPreferences.getString(DoorShop.name), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                      SizedBox(height: 25,),
+                      Text(DoorShop.sharedPreferences.getString(DoorShop.email), style: TextStyle(fontSize: 16, color: Colors.grey, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,),
+                      Text("+91 " + DoorShop.sharedPreferences.getInt(DoorShop.phone).toString(), style: TextStyle(fontSize: 16, color: Colors.grey, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,)
+                    ],
+                  ),
                 )
               ],
             ),
