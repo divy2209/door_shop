@@ -1,10 +1,9 @@
 import 'package:door_shop/screens/cart.dart';
-import 'package:door_shop/services/database/crop_data.dart';
-import 'package:door_shop/services/database/crop_model.dart';
+import 'package:door_shop/services/connection.dart';
 import 'package:door_shop/services/provider_data/cart_data.dart';
 import 'package:door_shop/services/utility.dart';
 import 'package:door_shop/widgets/drawer.dart';
-import 'package:door_shop/widgets/home_widgets/croplist.dart';
+import 'package:door_shop/widgets/network_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -59,12 +58,12 @@ class Home extends StatelessWidget {
           ],
         ),
         drawer: CustomDrawer(),
-        body: StreamProvider<List<Crop>>.value(
-          value: CropDatabase().cropsData,
-          initialData: null,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 3),
-            child: CropList(),
+        body: Provider<Connection>(
+          create: (context) => Connection(),
+          child: Consumer<Connection>(
+            builder: (context, value, _){
+              return NetworkWrapper(connection: value, screen: 'home');
+            },
           ),
         )
     );

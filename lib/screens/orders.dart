@@ -1,7 +1,6 @@
-import 'package:door_shop/services/database/order_data.dart';
-import 'package:door_shop/services/models/order_model.dart';
+import 'package:door_shop/services/connection.dart';
 import 'package:door_shop/services/utility.dart';
-import 'package:door_shop/widgets/order_widgets/orderlist.dart';
+import 'package:door_shop/widgets/network_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,12 +15,12 @@ class OrdersScreen extends StatelessWidget {
         title: Text('Orders'),
         centerTitle: true,
       ),
-      body: StreamProvider<List<Order>>.value(
-        value: OrderDatabase().ordersData,
-        initialData: null,
-        child: Padding(
-          padding: EdgeInsets.only(right: 3),
-          child: OrderList(),
+      body: Provider<Connection>(
+        create: (context) => Connection(),
+        child: Consumer<Connection>(
+          builder: (context, value, _){
+            return NetworkWrapper(connection: value, screen: 'order');
+          },
         ),
       )
     );
