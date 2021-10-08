@@ -1,5 +1,4 @@
 import 'package:door_shop/services/config.dart';
-import 'package:door_shop/services/database/order_data.dart';
 import 'package:door_shop/services/models/order_model.dart';
 import 'package:door_shop/services/utility.dart';
 import 'package:door_shop/widgets/order_widgets/order_summary.dart';
@@ -28,11 +27,9 @@ class OrderList extends StatelessWidget {
                 child: InkWell(
                   splashColor: Palette.primaryColor,
                   onTap: () async{
-                    String deliveryDate;
-                    if(order.status==4) deliveryDate = await OrderDatabase().getDeliveryDate(order.orderId);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context)=> OrderSummary(order: order, deliveryDate: deliveryDate,))
+                      MaterialPageRoute(builder: (context)=> OrderSummary(order: order))
                     );
                   },
                   child: Container(

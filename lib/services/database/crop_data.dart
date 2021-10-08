@@ -45,15 +45,9 @@ class CropDatabase{
   }
 
   Future updateQuantity({String uid, int count}) async {
-    Crop c = await getCrop(uid);
-    int newQuantity = c.quantity-count;
-    return await crop.doc(uid).set({
-      'crop name': c.name,
-      'crop uid': c.identifier,
-      'discount': c.discount,
-      'image url': c.url,
-      'price $rupee': c.price,
-      'pricing and quantity unit': c.unit,
+    int quantity = await getQuantity(uid);
+    int newQuantity = quantity-count;
+    return await crop.doc(uid).update({
       'quantity': newQuantity,
     });
   }

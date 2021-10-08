@@ -10,6 +10,7 @@ class Order{
   final int total;
   final String dateTime;
   final int status;
+  final String deliveryDate;
 
-  Order({this.orderId, this.crops, this.prices, this.discounts, this.quantities, this.address, this.total, this.subtotal, this.dateTime, this.status, this.units});
+  Order({this.orderId, this.crops, this.prices, this.discounts, this.quantities, this.address, this.total, this.subtotal, this.dateTime, this.status, this.units, this.deliveryDate});
 }

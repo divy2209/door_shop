@@ -20,13 +20,8 @@ class UserDatabase {
     });
   }
 
-  Future updateAddress({List<String> completeAddress/*String address, String city, String state, int pin*/}) async {
-    return await profile.doc(DoorShop.sharedPreferences.getString(DoorShop.userID)).set({
-      'uid' : DoorShop.sharedPreferences.getString(DoorShop.userID),
-      'name': DoorShop.sharedPreferences.getString(DoorShop.name),
-      'phone number': DoorShop.sharedPreferences.getInt(DoorShop.phone),
-      'email': DoorShop.sharedPreferences.getString(DoorShop.email),
-      'url' : DoorShop.sharedPreferences.getString(DoorShop.url),
+  Future updateAddress({List<String> completeAddress}) async {
+    return await profile.doc(DoorShop.sharedPreferences.getString(DoorShop.userID)).update({
       'address': completeAddress
     });
   }

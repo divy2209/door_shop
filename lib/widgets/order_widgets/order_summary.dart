@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 
 class OrderSummary extends StatelessWidget {
   final Order order;
-  final String deliveryDate;
-  OrderSummary({@required this.order, this.deliveryDate});
+  OrderSummary({@required this.order});
 
   final ScrollController _scrollController = ScrollController();
 
@@ -60,7 +59,7 @@ class OrderSummary extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Delivered on", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                    Text(deliveryDate),
+                    Text(order.deliveryDate),
                   ],
                 ) : SizedBox(),
                 order.status==3 ? Text("Arriving Today", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)) : SizedBox()
