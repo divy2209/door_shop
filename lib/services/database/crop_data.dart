@@ -4,6 +4,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'crop_model.dart';
 
 class CropDatabase{
+  final String search;
+  CropDatabase({this.search});
+
   final CollectionReference crop = FirebaseFirestore.instance.collection('crops');
   dynamic rupee = FontAwesomeIcons.rupeeSign;
 
@@ -22,7 +25,7 @@ class CropDatabase{
   }
 
   Stream<List<Crop>>get cropsData{
-    return crop.snapshots().map(_cropsDataList);
+    return crop.where('search list', arrayContains: search).snapshots().map(_cropsDataList);
   }
 
   Future<int> getQuantity(String uid) async {

@@ -14,7 +14,7 @@ class CropList extends StatelessWidget {
     final crops = Provider.of<List<Crop>>(context);
     return Padding(
       padding: const EdgeInsets.only(right: 3),
-      child: crops==null ? Center(child: CircularProgressIndicator()) : Scrollbar(
+      child: crops==null ? Center(child: CircularProgressIndicator()) : (crops.length==0 ? Center(child: Text("No veggies match!", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),)) : Scrollbar(
         controller: _scrollController,
         thickness: 4,
         radius: Radius.circular(5),
@@ -96,7 +96,7 @@ class CropList extends StatelessWidget {
             ) : SizedBox();
           },
         ),
-      ),
+      )),
     );
   }
 }

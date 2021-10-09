@@ -4,6 +4,7 @@ import 'package:door_shop/services/database/crop_data.dart';
 import 'package:door_shop/services/database/crop_model.dart';
 import 'package:door_shop/services/database/order_data.dart';
 import 'package:door_shop/services/models/order_model.dart';
+import 'package:door_shop/services/provider_data/home_data.dart';
 import 'package:door_shop/widgets/home_widgets/croplist.dart';
 import 'package:door_shop/widgets/order_widgets/orderlist.dart';
 import 'package:flutter/material.dart';
@@ -39,10 +40,14 @@ class _NetworkWrapperState extends State<NetworkWrapper> {
           }
           if(value != ConnectivityResult.none){
             if(widget.screen=='home'){
-              return StreamProvider<List<Crop>>.value(
-                value: CropDatabase().cropsData,
-                initialData: null,
-                child: CropList(),
+              return Consumer<HomeData>(
+                builder: (_,home,__){
+                  return StreamProvider<List<Crop>>.value(
+                    value: CropDatabase(search: home.name).cropsData,
+                    initialData: null,
+                    child: CropList(),
+                  );
+                },
               );
             } else {
               return StreamProvider<List<Order>>.value(
