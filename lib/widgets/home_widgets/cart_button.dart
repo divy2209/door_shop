@@ -1,11 +1,11 @@
 import 'package:door_shop/screens/checkout.dart';
-import 'package:door_shop/screens/screens.dart';
 import 'package:door_shop/services/config.dart';
 import 'package:door_shop/services/connection.dart';
 import 'package:door_shop/services/database/crop_model.dart';
 import 'package:door_shop/services/provider_data/address_data.dart';
 import 'package:door_shop/services/provider_data/cart_data.dart';
 import 'package:door_shop/services/utility.dart';
+import 'package:door_shop/widgets/home_widgets/home_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -122,7 +122,7 @@ class CartButton extends StatelessWidget {
                           cart.resetCart();
                           Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(builder: (context)=> Home()),
+                              MaterialPageRoute(builder: (context)=> HomeWrapper()),
                                   (route) => false
                           );
                         } else {

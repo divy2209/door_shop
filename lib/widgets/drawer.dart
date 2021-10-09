@@ -51,7 +51,7 @@ class CustomDrawer extends StatelessWidget {
               SizedBox(height: 10,),
               Center(
                 child: Text(
-                  "Hello, " + (DoorShop.sharedPreferences.getString(DoorShop.name) ?? ''),
+                  "Hello, " + (DoorShop.sharedPreferences.getString(DoorShop.displayName) ?? ''),
                   style: TextStyle(
                       fontSize: 20,
                       color: Palette.primaryColor

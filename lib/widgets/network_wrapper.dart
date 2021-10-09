@@ -40,14 +40,10 @@ class _NetworkWrapperState extends State<NetworkWrapper> {
           }
           if(value != ConnectivityResult.none){
             if(widget.screen=='home'){
-              return Consumer<HomeData>(
-                builder: (_,home,__){
-                  return StreamProvider<List<Crop>>.value(
-                    value: CropDatabase(search: home.name).cropsData,
-                    initialData: null,
-                    child: CropList(),
-                  );
-                },
+              return StreamProvider<List<Crop>>.value(
+                value: CropDatabase(search: Provider.of<HomeData>(context, listen: false).name).cropsData,
+                initialData: null,
+                child: CropList(),
               );
             } else {
               return StreamProvider<List<Order>>.value(

@@ -43,6 +43,8 @@ class UserDatabase {
         await DoorShop.sharedPreferences.setString(DoorShop.name, dataSnap.get(DoorShop.name));
         await DoorShop.sharedPreferences.setInt(DoorShop.phone, dataSnap.get(DoorShop.phone));
         await DoorShop.sharedPreferences.setString(DoorShop.url, dataSnap.get(DoorShop.url));
+        String displayName = displayNameGenerator(DoorShop.sharedPreferences.getString(DoorShop.name));
+        await DoorShop.sharedPreferences.setString(DoorShop.displayName, displayName);
         List<dynamic> address = await dataSnap.get(DoorShop.address);
         if(address.isNotEmpty){
           await DoorShop.sharedPreferences.setString(DoorShop.address, address[0]);
@@ -52,5 +54,17 @@ class UserDatabase {
         }
       });
     }
+  }
+
+  String displayNameGenerator(String name){
+    int n = name.length;
+    int k = n;
+    for(int i = 0; i<n; i++){
+      if(name.substring(i,i+1)==" "){
+        k = i;
+        break;
+      }
+    }
+    return name.substring(0,k);
   }
 }

@@ -99,7 +99,11 @@ class Home extends StatelessWidget {
               create: (context) => Connection(),
               child: Consumer<Connection>(
                 builder: (context, value, _){
-                  return NetworkWrapper(connection: value, screen: 'home');
+                  return Consumer<HomeData>(
+                    builder: (_,__,___){
+                      return NetworkWrapper(connection: value, screen: 'home');
+                    },
+                  );
                 },
               ),
             ),
