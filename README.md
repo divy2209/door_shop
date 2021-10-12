@@ -14,8 +14,8 @@ The app is internet aware, additional checks placed interacting with the firebas
 ## Authenticating screens
 ---
 <br />
-<img align="left" src="assets/app_pics/login.jpg" alt="login" width="250"/>
-<img align="right" src="assets/app_pics/register.jpg" alt="register" width="250"/>
+<img align="left" src="assets/app_pics/loginr.jpg" alt="login" width="250"/>
+<img align="right" src="assets/app_pics/registerr.jpg" alt="register" width="250"/>
 
 <br />
 <br />

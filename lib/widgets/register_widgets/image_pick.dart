@@ -6,7 +6,7 @@ import 'package:door_shop/services/provider_data/register_data.dart';
 import 'package:door_shop/services/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
+//import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class ImagePick extends StatelessWidget {
@@ -50,7 +50,7 @@ class ImagePick extends StatelessWidget {
             child: InkWell(
               splashColor: Colors.transparent,
               onTap: () async {
-                if(await Permission.camera.request().isGranted && await Permission.storage.request().isGranted){
+                if(true/*await Permission.camera.request().isGranted && await Permission.storage.request().isGranted*/){
                   if(form == FormIdentifier.register){
                     Provider.of<RegisterData>(context, listen: false).getImage();
                   }
@@ -74,7 +74,7 @@ class ImagePick extends StatelessWidget {
                                 TextButton(
                                   child: Text('Settings'),
                                   onPressed: (){
-                                    openAppSettings();
+                                    //openAppSettings();
                                     Navigator.of(context).pop();
                                   },
                                 ),
